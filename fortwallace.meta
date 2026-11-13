@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<CDispatchData>
+	<BountyResponses>
+		<BountyDispatch>
+			<Name>LAW_LOCAL_FORT_WALLACE</Name>
+			<RandomWeight value="1.0" />
+			<RequiredRegion>LAW_REGION_FORT_WALLACE</RequiredRegion>
+			<RequiredCooldowns>
+				<Item>DefaultCooldown</Item>
+			</RequiredCooldowns>
+			<DispatchPhases>
+			
+				<!-- Phase: Riders -->
+				<Phase>
+					<Name>Riders</Name>
+					<GroupMultiplier value="0.3"/>
+					<SpawnDelay value="25.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>CumberlandOnFootCarbine</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>CumberlandOnFootCarbine</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+								<MinSeverityMultiplier value="0.0f"/>
+								<MaxSeverityMultiplier value="3.0f"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+					</DispatchPeds>
+				
+					<PhaseEndConditions>
+						<Condition type="CAIConditionReferenced">
+							<Name>DISPATCH_LOW_SEVERITY_ESCALATION_WILDERNESS</Name>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<!--Switch to Reinforcements phase -->
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>Reinforcements</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<Phase>
+					<Name>Reinforcements</Name>
+					<GroupMultiplier value="0.3"/>
+					<SpawnDelay value="15.0"/>
+					
+					<!--Phase peds-->
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>CumberlandOnFootCarbine</Preset>
+								<MinNumPeds value="2"/>
+								<MaxNumPeds value="4"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+					</DispatchPeds>
+					
+					<!--Phase end conditions-->
+					<PhaseEndConditions>
+						<Condition type="CAIConditionOr">
+							<Conditions>
+								<Condition type="CAIConditionTimeInDispatchPhase">
+									<LowerBound value="20000"/>
+								</Condition>
+								<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+									<UpperBound value="0"/>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<!--Next phase options-->
+					<NextPhases>
+						<!--Switch to endless riders phase-->
+						<PhaseOption>
+							<Name>EndlessRiders</Name>
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+				<Phase>
+					<Name>EndlessRiders</Name>
+					
+					<GroupMultiplier value="0.3f"/>
+					<SpawnDelay value="3.00"/>
+					
+					<!--Phase peds-->
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>CumberlandOnFootCarbineVet</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+					</DispatchPeds>
+					
+					<!--Phase end conditions-->
+					<PhaseEndConditions>
+						<Condition type="CAIConditionOr">
+							<Conditions>	
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionTimeInDispatchPhase">
+											<LowerBound value="40000"/>
+										</Condition>
+										<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+											<UpperBound value="6"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionTimeInDispatchPhase">
+											<LowerBound value="12000"/>
+										</Condition>
+										<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+											<UpperBound value="1"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<!--Next phase options-->
+					<NextPhases>
+						<!--loop on this phase-->
+						<PhaseOption>
+						<!-- End Response -->
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+			</DispatchPhases>
+		</BountyDispatch>
+	</BountyResponses>
+	<CleanUpDispatchPedPresets>
+		<Item>RiderRuralFoothills</Item>
+	</CleanUpDispatchPedPresets>
+</CDispatchData>

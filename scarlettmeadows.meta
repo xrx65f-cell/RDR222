@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<CDispatchData>
+	<BountyResponses>
+		<BountyDispatch>
+			<Name>LAW_WILDERNESS_SCARLETT_MEADOWS</Name>
+			<RandomWeight value="1.0" />
+			<RequiredRegion>LAW_REGION_SCARLETT_MEADOWS</RequiredRegion>
+			<RequiredCooldowns>
+				<Item>DefaultCooldown</Item>
+			</RequiredCooldowns>
+			<Flags>CantBeCleared</Flags>
+			<CombatInfoOverride>LAW_WILDERNESS</CombatInfoOverride>
+			<DispatchPhases>
+				
+				<!-- Phase: Riders -->
+				<Phase>
+					<Name>Riders</Name>
+					<GroupMultiplier value="0.3"/>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_NEAR</Name>
+							</Condition>
+							<SpawnDelay value="35.00"/>
+						</Item>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="40.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="30.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderUnmaskedLemoyne</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>RiderLemoyne</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+								<MinSeverityMultiplier value="0.0f"/>
+								<MaxSeverityMultiplier value="3.0f"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+				
+					<PhaseEndConditions>
+						<Condition type="CAIConditionReferenced">
+							<Name>DISPATCH_LOW_SEVERITY_ESCALATION_WILDERNESS</Name>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<!--Switch to Reinforcements phase, always-->
+						<PhaseOption>
+							<Name>Reinforcements</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<!-- Phase: Reinforcements -->
+				<Phase>
+					<Name>Reinforcements</Name>
+					<GroupMultiplier value="0.3"/>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_NEAR</Name>
+							</Condition>
+							<SpawnDelay value="15.00"/>
+						</Item>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="20.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="25.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderOldLemoyne</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+					
+					<!-- If we've been in the phase for min 30 seconds -->
+					<PhaseEndConditions>
+						<Condition type="CAIConditionTimeInDispatchPhase">
+							<LowerBound value="30000"/>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<PhaseOption>
+							<Condition type="CAIConditionAnd">
+								<Conditions>
+									<Condition type="CAIConditionWantedLevel">
+										<WantedLevelLowerBound value="2"/>
+									</Condition>
+									<Condition type="CAIConditionOr">
+										<Conditions>
+											<Condition type="CAIConditionTimeEvading">
+												<LowerBound value="5"/>
+											</Condition>
+											<Condition type="CAIConditionNot">
+												<Condition type="CAIConditionSpottedByLaw"/>
+											</Condition>
+										</Conditions>
+									</Condition>
+								</Conditions>
+							</Condition>
+							<Name>Doggos</Name>
+						</PhaseOption>
+						<PhaseOption>
+							<Condition type="CAIConditionNot">
+								<Condition type="CAIConditionNumTimesDispatchPhaseSelected">
+									<Phase>Reinforcements</Phase>
+									<LowerBound value="1"/>
+								</Condition>
+							</Condition>
+							<Name>Reinforcements</Name>
+						</PhaseOption>
+						<PhaseOption>
+							<Name>FinalWave</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<Phase>
+					<Name>Doggos</Name>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="20.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="15.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderUnmaskedLemoyne</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<!-- Additional Lemoyne per crime severity -->
+							<DispatchGroup>
+								<SelectionConditions>
+									<Condition type="CAIConditionIncidentSeverity">
+										<MinSeverity>High</MinSeverity>
+									</Condition>
+								</SelectionConditions>
+								<Preset>RiderLemoyne</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<SelectionConditions>
+									<Condition type="CAIConditionWantedLevel">
+										<WantedLevelLowerBound value="4"/>
+									</Condition>
+								</SelectionConditions>
+								<Preset>RiderUnmaskedLemoyne</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>							
+						</DispatchPedGroups>
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+					
+					<PhaseEndConditions>
+						<Condition type="CAIConditionOr">
+							<Conditions>
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionTimePlayerHostileInDispatchPhase">
+											<LowerBound value="50000"/>
+										</Condition>
+										<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+											<UpperBound value="2"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionTimePlayerHostileInDispatchPhase">
+											<LowerBound value="40000"/>
+										</Condition>
+										<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+											<UpperBound value="1"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionTimePlayerHostileInDispatchPhase">
+											<LowerBound value="32000"/>
+										</Condition>
+										<Condition type="CAIConditionHumanPedsRemainingInCurrentIncident">
+											<UpperBound value="0"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<PhaseOption>
+							<Name>FinalWave</Name>
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+				
+				<!-- Phase: FinalWave -->
+				<Phase>
+					<Name>FinalWave</Name>
+					<GroupMultiplier value="0.3"/>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_NEAR</Name>
+							</Condition>
+							<SpawnDelay value="40.00"/>
+						</Item>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="30.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="45.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderOldLemoyne</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>RiderLemoyne</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>							
+						</DispatchPedGroups>
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+					
+					<NextPhases>
+						<!-- End Response -->
+					</NextPhases>	
+				</Phase>
+			</DispatchPhases>
+		</BountyDispatch>
+	</BountyResponses>
+	<CleanUpDispatchPedPresets>
+		<Item>RiderRuralLowlands</Item>
+	</CleanUpDispatchPedPresets>
+</CDispatchData>

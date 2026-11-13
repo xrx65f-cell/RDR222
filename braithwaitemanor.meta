@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<CDispatchData>
+	<BountyResponses>
+		<BountyDispatch>
+			<Name>LAW_LOCAL_BRAITHWAITE_MANOR</Name>
+			<RandomWeight value="1.0" />
+			<RequiredRegion>LAW_REGION_BRAITHWAITE_MANOR</RequiredRegion>
+			<RequiredCooldowns>
+				<Item>DefaultCooldown</Item>
+			</RequiredCooldowns>
+			<DispatchPhases>
+				
+				<!-- Phase: Riders -->
+				<Phase>
+					<Name>Riders</Name>
+					<GroupMultiplier value="0.3"/>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_NEAR</Name>
+							</Condition>
+							<SpawnDelay value="25.00"/>
+						</Item>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="30.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="30.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>OnFootBraith</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>OnFootBraith</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+								<MinSeverityMultiplier value="0.0f"/>
+								<MaxSeverityMultiplier value="3.0f"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+					</DispatchPeds>
+				
+					<PhaseEndConditions>
+						<Condition type="CAIConditionReferenced">
+							<Name>DISPATCH_LOW_SEVERITY_ESCALATION_WILDERNESS</Name>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<!--Switch to Reinforcements phase -->
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>Reinforcements</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<!-- Phase: Reinforcements -->
+				<Phase>
+					<Name>Reinforcements</Name>
+					<GroupMultiplier value="0.3"/>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_NEAR</Name>
+							</Condition>
+							<SpawnDelay value="15.00"/>
+						</Item>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="20.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="20.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderBraith</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>OnFootBraith</Preset>
+								<RandomWeight value="0.75"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>RiderBraith</Preset>
+								<RandomWeight value="0.25f"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+					</DispatchPeds>
+					
+					<!-- End the phase if we kill most of the wave -->
+					<PhaseEndConditions>
+						<Condition type="CAIConditionAnd">
+							<Conditions>
+								<Condition type="CAIConditionTimeInDispatchPhase">
+									<LowerBound value="20000"/>
+								</Condition>
+								<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+									<UpperBound value="1"/>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<!-- Loop a couple of times, then enter LastRiders -->
+					<NextPhases>
+						<PhaseOption>
+							<Condition type="CAIConditionNumTimesDispatchPhaseSelected">
+								<Phase>Reinforcements</Phase>
+								<LowerBound value="2"/>
+							</Condition>
+							<Name>LastRiders</Name>
+						</PhaseOption>
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>Reinforcements</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<!-- Phase: LastRiders -->
+				<Phase>
+					<Name>LastRiders</Name>
+					<GroupMultiplier value="0.3"/>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_NEAR</Name>
+							</Condition>
+							<SpawnDelay value="45.00"/>
+						</Item>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="60.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="35.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderOldLemoyne</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderUnmaskedLemoyne</Preset>
+								<RandomWeight value="0.5"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>RiderLemoyne</Preset>
+								<RandomWeight value="0.5f"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="3"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+					</DispatchPeds>
+				
+					
+					<!-- End the phase if we kill most of the wave -->
+					<PhaseEndConditions>
+						<Condition type="CAIConditionAnd">
+							<Conditions>
+								<Condition type="CAIConditionTimeInDispatchPhase">
+									<LowerBound value="30000"/>
+								</Condition>
+								<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+									<UpperBound value="1"/>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<!--Switch to BRTPhaseControl -->
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>BRTPhaseControl</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<Phase>
+					<Name>BRTPhaseControl</Name>
+					
+					<PhaseEndConditions>
+						<Condition type="CAIConditionOr">
+							<Conditions>
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+											<UpperBound value="1"/>
+										</Condition>
+										<Condition type="CAIConditionTimeInDispatchPhase">
+											<LowerBound value="15000"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionTimeInDispatchPhase">
+											<LowerBound value="3000"/>
+										</Condition>
+										<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+											<UpperBound value="0"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+					
+				<!-- Phase: EndlessRiders -->
+					<NextPhases>
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>EndlessRiders</Name>
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+				
+				<!-- Phase: EndlessRiders -->
+				<Phase>
+					<Name>EndlessRiders</Name>
+					<GroupMultiplier value="0.3"/>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_NEAR</Name>
+							</Condition>
+							<SpawnDelay value="90.00"/>
+						</Item>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="120.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="20.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderBronte</Preset>
+								<MinNumPeds value="2"/>
+								<MaxNumPeds value="4"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>BronteWagon</Preset>
+								<RandomWeight value="0.15f"/>
+								<MinNumPeds value="2"/>
+								<MaxNumPeds value="4"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+					</DispatchPeds>
+					
+					<PhaseEndConditions>
+						<Condition type="CAIConditionTimeInDispatchPhase">
+							<LowerBound value="60000"/>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<PhaseOption>
+							<!-- End Response -->
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>			
+			</DispatchPhases>
+		</BountyDispatch>
+	</BountyResponses>
+	<CleanUpDispatchPedPresets>
+		<Item>RiderRuralLowlands</Item>
+	</CleanUpDispatchPedPresets>
+</CDispatchData>

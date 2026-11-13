@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<CDispatchData>
+	<BountyResponses>
+		<BountyDispatch>
+			<Name>LAW_JAILBREAK_VALENTINE</Name>
+			<!-- Do not choose this response for ambient incidents -->
+			<RandomWeight value="0.0" />
+			<RequiredRegion>LAW_REGION_VALENTINE</RequiredRegion>
+			<RequiredCooldowns>
+				<Item>DefaultCooldown</Item>
+			</RequiredCooldowns>
+			<Flags>SyncLocationToPed CantBeCleared CantAcquireFreeResources CanSpawnInFrontDuringEscape DisableCleanUp PursueTargetImmediately</Flags>
+			<DispatchPhases>
+				<Phase>
+					<Name>EndlessRiders</Name>
+					
+					<GroupMultiplier value="0.3f"/>
+					<SpawnDelay value="1.00"/>
+					
+					<!--Phase peds-->
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderPlains</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+					</DispatchPeds>
+					
+					<!--Phase end conditions-->
+					<PhaseEndConditions>
+						<Condition type="CAIConditionAnd">
+							<Conditions>
+								<Condition type="CAIConditionTimeInDispatchPhase">
+									<LowerBound value="15000"/>
+								</Condition>
+								<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+									<UpperBound value="1"/>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<!--Next phase options-->
+					<NextPhases>
+						<!--loop on this phase-->
+						<PhaseOption>
+							<Name>EndlessRiders</Name>
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+			</DispatchPhases>
+		</BountyDispatch>
+	</BountyResponses>
+	<CleanUpDispatchPedPresets>
+		<Item>RiderPlains</Item>
+	</CleanUpDispatchPedPresets>
+</CDispatchData>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<CDispatchData>
+	<BountyResponses>
+		<BountyDispatch>
+			<Name>LAW_LOCAL_EMERALD_RANCH</Name>
+			<RandomWeight value="1.0" />
+			<RequiredRegion>LAW_REGION_EMERALD_RANCH</RequiredRegion>
+			<RequiredCooldowns>
+				<Item>DefaultCooldown</Item>
+			</RequiredCooldowns>
+			  <DispatchPhases>
+				
+				<!-- Phase: Riders -->
+				<Phase>
+					<Name>Riders</Name>
+					<GroupMultiplier value="0.3"/>
+					<SpawnDelay value="75.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>FarmHandOnFootShotgun</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>FarmHandOnFootShotgun</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+								<MinSeverityMultiplier value="0.0f"/>
+								<MaxSeverityMultiplier value="3.0f"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+					</DispatchPeds>
+				
+					<PhaseEndConditions>
+						<Condition type="CAIConditionReferenced">
+							<Name>DISPATCH_LOW_SEVERITY_ESCALATION_WILDERNESS</Name>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<!--Switch to Reinforcements phase -->
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>Reinforcements</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<!-- Phase: Reinforcements -->
+				<Phase>
+					<Name>Reinforcements</Name>
+					<GroupMultiplier value="0.3"/>
+					<SpawnDelay value="35.0"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderTrain</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderGuard</Preset>
+								<RandomWeight value="0.75"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>RiderGuard</Preset>
+								<RandomWeight value="0.25f"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+					</DispatchPeds>
+					
+					<!-- End the phase if we kill most of the wave -->
+					<PhaseEndConditions>
+						<Condition type="CAIConditionAnd">
+							<Conditions>
+								<Condition type="CAIConditionTimeInDispatchPhase">
+									<LowerBound value="20000"/>
+								</Condition>
+								<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+									<UpperBound value="1"/>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<!-- Loop a couple of times, then enter LastRiders -->
+					<NextPhases>
+						<PhaseOption>
+							<Condition type="CAIConditionNumTimesDispatchPhaseSelected">
+								<Phase>Reinforcements</Phase>
+								<LowerBound value="2"/>
+							</Condition>
+							<Name>LastRiders</Name>
+						</PhaseOption>
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>Reinforcements</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<!-- Phase: LastRiders -->
+				<Phase>
+					<Name>LastRiders</Name>
+					<GroupMultiplier value="0.3"/>
+					<SpawnDelay value="40.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderVal</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderVal</Preset>
+								<RandomWeight value="0.5"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>RiderTrain</Preset>
+								<RandomWeight value="0.5f"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+					</DispatchPeds>
+				
+					
+					<!-- End the phase if we kill most of the wave -->
+					<PhaseEndConditions>
+						<Condition type="CAIConditionAnd">
+							<Conditions>
+								<Condition type="CAIConditionTimeInDispatchPhase">
+									<LowerBound value="30000"/>
+								</Condition>
+								<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+									<UpperBound value="1"/>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<!--Switch to ERPhaseControl -->
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>ERPhaseControl</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<Phase>
+					<Name>ERPhaseControl</Name>
+					
+					<PhaseEndConditions>
+						<Condition type="CAIConditionOr">
+							<Conditions>
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+											<UpperBound value="1"/>
+										</Condition>
+										<Condition type="CAIConditionTimeInDispatchPhase">
+											<LowerBound value="15000"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionTimeInDispatchPhase">
+											<LowerBound value="3000"/>
+										</Condition>
+										<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+											<UpperBound value="0"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+					
+				<!-- Phase: EndlessRiders -->
+					<NextPhases>
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>EndlessRiders</Name>
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+				
+				<!-- Phase: EndlessWave -->
+				<Phase>
+					<Name>EndlessRiders</Name>
+					<GroupMultiplier value="0.3"/>
+					<SpawnDelay value="45.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>EmeraldPlains</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>EmeraldPlains</Preset>
+								<RandomWeight value="0..65f"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>EmeraldPlains</Preset>
+								<RandomWeight value="0.35f"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+					</DispatchPeds>
+					
+					<PhaseEndConditions>
+						<Condition type="CAIConditionTimeInDispatchPhase">
+							<LowerBound value="17000"/>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<!-- End Response -->
+					</NextPhases>	
+				</Phase>			
+			</DispatchPhases>
+		</BountyDispatch>
+	</BountyResponses>
+	<CleanUpDispatchPedPresets>
+		<Item>RiderRuralPlains</Item>
+	</CleanUpDispatchPedPresets>
+</CDispatchData>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<CDispatchData>
+	<BountyResponses>
+		<BountyDispatch>
+			<Name>LAW_LOCAL_BLACKWATER_MAINGAME</Name>
+			<RandomWeight value="1.0" />
+			<RequiredRegion>LAW_REGION_BLACKWATER_MAINGAME</RequiredRegion>
+			<RequiredCooldowns>
+				<Item>DefaultCooldown</Item>
+			</RequiredCooldowns>
+			<Flags>CanSpawnInFrontDuringEscape</Flags>
+			<DispatchPhases>
+				
+				<!-- Phase: On Foot -->
+				<Phase>
+					<Name>OnFoot</Name>
+					<GroupMultiplier value="0.4f"/>
+
+					<!--Phase peds--> 
+					<!--Organized in DispatchPedGroups or RandomDispatchPedGroups-->
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>BlackwaterOnFoot</Preset>
+								<MinNumPeds value="3"/>
+								<MaxNumPeds value="5"/>
+							</DispatchGroup>						
+						</DispatchPedGroups>
+						
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED_SAINT_DENIS</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+					
+					<!--Phase end conditions-->
+					<PhaseEndConditions>
+						<Condition type="CAIConditionOr">
+							<Conditions>	
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionTimeInDispatchPhase">
+											<LowerBound value="5000"/>
+										</Condition>
+										<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+											<UpperBound value="2"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+								<Condition type="CAIConditionAnd">
+									<Conditions>
+										<Condition type="CAIConditionTimeInDispatchPhase">
+											<LowerBound value="1500"/>
+										</Condition>
+										<Condition type="CAIConditionPedsRemainingInCurrentIncident">
+											<UpperBound value="0"/>
+										</Condition>
+									</Conditions>
+								</Condition>
+							</Conditions>
+						</Condition>
+					</PhaseEndConditions>
+
+					<!--Next phase options-->
+					<NextPhases>
+						<PhaseOption>
+						<!-- Repeat OnFoot three times before entering BLWMPhaseControl -->
+							<Condition type="CAIConditionNumTimesDispatchPhaseSelected">
+								<Phase>OnFoot</Phase>
+								<LowerBound value="3"/>
+							</Condition>
+							<Name>BLWMPhaseControl</Name>
+						</PhaseOption>
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>OnFoot</Name>
+						</PhaseOption>
+					</NextPhases>		
+				</Phase>
+
+				<!-- Phase: BLWMPhaseControl -->				
+				<Phase>
+					<Name>BLWMPhaseControl</Name>
+					
+					<DispatchPeds>
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED_SAINT_DENIS</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+					
+					<PhaseEndConditions>
+						<Condition type="CAIConditionReferenced">
+							<Name>DISPATCH_PHASE_CONTROL_ESCALATION_TOWN</Name>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						
+						<!-- PRE-CHECK for 5 star wanted level-->
+						<PhaseOption>
+							<Condition type="CAIConditionWantedLevel">
+								<WantedLevelLowerBound value="5"/>
+							</Condition>
+							<Name>Marshals</Name>
+						</PhaseOption>
+						
+						<!-- WildernessRiders -->
+						<PhaseOption>
+							<Condition type="CAIConditionAnd">
+								<Conditions>
+									<Condition type="CAIConditionRandom">
+										<Chances value="0.25f"/>
+									</Condition>
+									<Condition type="CAIConditionNumTimesDispatchPhaseSelected">
+										<Phase>BLWMPhaseControl</Phase>
+										<LowerBound value="2"/>
+										<UpperBound value="8"/>
+									</Condition>
+								</Conditions>
+							</Condition>
+							<Name>WildernessRiders</Name>
+						</PhaseOption>
+						
+						<!-- EndlessRiders -->
+						<PhaseOption>
+							<Condition type="CAIConditionNumTimesDispatchPhaseSelected">
+								<Phase>BLWMPhaseControl</Phase>
+								<LowerBound value="10"/>
+							</Condition>
+							<Name>EndlessRiders</Name>
+						</PhaseOption>
+						
+						<!-- DEFAULT: If we fell through everything, reloop to BaseRiders -->
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>BaseRiders</Name>
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+				
+				<!-- Phase: BaseRiders -->
+				<Phase>
+					<Name>BaseRiders</Name>
+					<GroupMultiplier value="0.3f"/>
+					
+					<!-- add a spawn delay so that we don't have insta-triggers upon killing a lawped -->
+					<SpawnDelay value="1.00"/>
+
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>BlackwaterOnFoot</Preset>
+								<MinNumPeds value="3"/>
+								<MaxNumPeds value="4"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>BlackwaterRider</Preset>
+								<RandomWeight value="0.5"/>
+								<MinNumPeds value="2"/>
+								<MaxNumPeds value="3"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>BlackwaterRiderSniper</Preset>
+								<RandomWeight value="0.2f"/>
+								<MinNumPeds value="2"/>
+								<MaxNumPeds value="3"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>BlackwaterRiderShotgun</Preset>
+								<RandomWeight value="0.3f"/>
+								<MinNumPeds value="2"/>
+								<MaxNumPeds value="3"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+						
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED_SAINT_DENIS</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+					
+					<PhaseEndConditions>
+						<Condition type="CAIConditionTimeInDispatchPhase">
+							<LowerBound value="2000"/>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>BLWMPhaseControl</Name>
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+
+				<!-- Phase: WildernessRiders -->
+				<Phase>
+					<Name>WildernessRiders</Name>
+					<GroupMultiplier value="0.3f"/>
+
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>BlackwaterOnFoot</Preset>
+								<MinNumPeds value="3"/>
+								<MaxNumPeds value="4"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>BlackwaterRiderRural</Preset>
+								<MinNumPeds value="3"/>
+								<MaxNumPeds value="4"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED_SAINT_DENIS</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+					
+					<PhaseEndConditions>
+						<Condition type="CAIConditionTimeInDispatchPhase">
+							<LowerBound value="1000"/>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>BLWMPhaseControl</Name>
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+				
+				<!-- Phase: Endless Riders -->
+				<Phase>
+					<Name>EndlessRiders</Name>
+					<GroupMultiplier value="0.3f"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>BlackwaterOnFoot</Preset>
+								<MinNumPeds value="3"/>
+								<MaxNumPeds value="4"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>BlackwaterRiderSniper</Preset>
+								<RandomWeight value="0.5f"/>
+								<MinNumPeds value="2"/>
+								<MaxNumPeds value="4"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>BlackwaterRiderShotgun</Preset>
+								<RandomWeight value="0.5f"/>
+								<MinNumPeds value="2"/>
+								<MaxNumPeds value="4"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+						
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED_SAINT_DENIS</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+				
+					<PhaseEndConditions>
+						<Condition type="CAIConditionTimeInDispatchPhase">
+							<LowerBound value="1000"/>
+						</Condition>
+					</PhaseEndConditions>
+
+					<NextPhases>
+						<PhaseOption>
+							<Condition type="NULL"/>
+							<Name>BLWMPhaseControl</Name>
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+				
+				<!-- Phase: Marshals -->
+				<Phase>
+					<Name>Marshals</Name>
+					<GroupMultiplier value="0.3f"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>MarshalCarbine</Preset>
+								<MinNumPeds value="3"/>
+								<MaxNumPeds value="3"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>MarshalShotgun</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>MarshalSniper</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>PinkertonShotgun</Preset>
+								<RandomWeight value="0.5f"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>							
+							<DispatchGroup>
+								<Preset>PinkertonSniper</Preset>
+								<RandomWeight value="0.5f"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+						
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED_SAINT_DENIS</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+				
+					<PhaseEndConditions>
+						<Condition type="CAIConditionTimeInDispatchPhase">
+							<LowerBound value="1000"/>
+						</Condition>
+					</PhaseEndConditions>
+
+					<NextPhases>
+						<PhaseOption>
+					<!-- End Response -->
+						</PhaseOption>
+					</NextPhases>
+				</Phase>
+			</DispatchPhases>
+		</BountyDispatch>
+	</BountyResponses>
+	<CleanUpDispatchPedPresets>
+		<Item>BlackwaterRider</Item>
+	</CleanUpDispatchPedPresets>
+</CDispatchData>

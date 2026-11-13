@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>	
+<CDispatchData>
+	<BountyResponses>
+		<BountyDispatch>
+			<Name>LAW_WILDERNESS_BAYOU_NWA</Name>
+			<RandomWeight value="1.0" />
+			<RequiredRegion>LAW_REGION_BAYOU_NWA</RequiredRegion>
+			<RequiredCooldowns>
+				<Item>DefaultCooldown</Item>
+			</RequiredCooldowns>
+			<Flags>CantBeCleared</Flags>
+			<CombatInfoOverride>LAW_WILDERNESS</CombatInfoOverride>
+			<DispatchPhases>
+				
+				<!-- Phase: Riders -->
+				<Phase>
+					<Name>Riders</Name>
+					<GroupMultiplier value="0.3"/>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_NEAR</Name>
+							</Condition>
+							<SpawnDelay value="30.00"/>
+						</Item>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="40.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="30.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>LagrasTown</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>LagrasTown</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+								<MinSeverityMultiplier value="0.0f"/>
+								<MaxSeverityMultiplier value="3.0f"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+				
+					<PhaseEndConditions>
+						<Condition type="CAIConditionReferenced">
+							<Name>DISPATCH_LOW_SEVERITY_ESCALATION_WILDERNESS</Name>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<!--Switch to Reinforcements phase, always-->
+						<PhaseOption>
+							<Name>Reinforcements</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<!-- Phase: Reinforcements -->
+				<Phase>
+					<Name>Reinforcements</Name>
+					<GroupMultiplier value="0.3"/>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_NEAR</Name>
+							</Condition>
+							<SpawnDelay value="30.00"/>
+						</Item>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="40.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="30.00"/>
+					
+					<DispatchPeds>
+						<DispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderLagras</Preset>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</DispatchPedGroups>
+						
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>RiderLagras</Preset>
+								<RandomWeight value="0.5"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>RiderLagras</Preset>
+								<RandomWeight value="0.5f"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+					
+					<!-- If we kill these two waves, then a last "search party" comes out -->
+					<!-- If we haven't killed them, don't send anybody else -->
+					<PhaseEndConditions>
+						<Condition type="CAIConditionReferenced">
+							<Name>DISPATCH_RESPONSE_FINISHED_WILDERNESS</Name>
+						</Condition>
+					</PhaseEndConditions>
+					
+					<NextPhases>
+						<PhaseOption>
+							<Name>FinalWave</Name>
+						</PhaseOption>
+					</NextPhases>	
+				</Phase>
+				
+				<!-- Phase: FinalWave -->
+				<Phase>
+					<Name>FinalWave</Name>
+					<GroupMultiplier value="0.3"/>
+					<ConditionalSpawnDelays>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_NEAR</Name>
+							</Condition>
+							<SpawnDelay value="40.00"/>
+						</Item>
+						<Item>
+							<Condition type="CAIConditionReferenced">
+								<Name>DISPATCH_PLAYER_DISTANCE_TO_TOWN_MID</Name>
+							</Condition>
+							<SpawnDelay value="60.00"/>
+						</Item>
+					</ConditionalSpawnDelays>
+					<SpawnDelay value="90.00"/>
+					
+					<DispatchPeds>
+						<RandomDispatchPedGroups>
+							<DispatchGroup>
+								<Preset>Nightfolk</Preset>
+								<RandomWeight value="0.15"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="1"/>
+							</DispatchGroup>
+							<DispatchGroup>
+								<Preset>Nightfolk</Preset>
+								<RandomWeight value="0.15f"/>
+								<MinNumPeds value="1"/>
+								<MaxNumPeds value="2"/>
+							</DispatchGroup>
+						</RandomDispatchPedGroups>
+						<GreedyAcquireCondition type="CAIConditionReferenced">
+							<Name>SHOULD_GRAB_AVAILABLE_DISPATCH_PED</Name>
+						</GreedyAcquireCondition>
+					</DispatchPeds>
+					
+					<NextPhases>
+						<!-- End Response -->
+					</NextPhases>	
+				</Phase>
+				
+			</DispatchPhases>
+		</BountyDispatch>
+	</BountyResponses>
+	<CleanUpDispatchPedPresets>
+		<Item>RiderRuralLowlands</Item>
+	</CleanUpDispatchPedPresets>
+</CDispatchData>
